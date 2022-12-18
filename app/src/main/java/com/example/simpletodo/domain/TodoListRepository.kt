@@ -1,5 +1,7 @@
 package com.example.simpletodo.domain
 
+import androidx.lifecycle.LiveData
+
 interface TodoListRepository {
 
     fun addTodoItem(todoItem: TodoItem)
@@ -10,5 +12,5 @@ interface TodoListRepository {
 
     fun getTodoItem(todoItemId: Int): TodoItem
 
-    fun getTodoItemList(): List<TodoItem>
+    fun getTodoItemList(): LiveData<List<TodoItem>>
 }
