@@ -4,19 +4,20 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.simpletodo.domain.TodoItem
 import com.example.simpletodo.domain.TodoListRepository
+import kotlin.random.Random
 
 object TodoListRepositoryImpl: TodoListRepository {
 
     private val todoListLD = MutableLiveData<List<TodoItem>>()
-    private val todoList = mutableListOf<TodoItem>()
+    private val todoList = sortedSetOf<TodoItem>({o1, o2 -> o1.id.compareTo(o2.id)})
 
     private var autoIncrementId = 0
 
     init {
         for (i in 0..10) {
             val item = TodoItem(desc = "Text #$i",
-                priority = "LOW",
-                isComplete = true)
+                isHigh = Random.nextBoolean(),
+                isComplete = Random.nextBoolean())
             addTodoItem(item)
         }
     }

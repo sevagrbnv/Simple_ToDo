@@ -2,8 +2,8 @@ package com.example.simpletodo.domain
 
 data class TodoItem(
     val desc: String,
-    val priority: String,
     val isComplete: Boolean,
+    val isHigh: Boolean = false,
     var id: Int = UNDEFINED_ID
 ) {
     companion object {

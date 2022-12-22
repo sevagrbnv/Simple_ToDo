@@ -9,7 +9,9 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recView"
         android:layout_height="match_parent"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/guideline_middle"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:layout_margin="@dimen/small_margin"
         tools:listitem="@layout/todoitem_enable"
@@ -21,12 +23,26 @@
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/guideline_middle"
         android:src="@drawable/add_icon"
         android:clickable="true"
         android:focusable="true"
         android:layout_margin="@dimen/fab_margin"
         />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_middle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/todoitem_container"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        app:layout_constraintStart_toStartOf="@id/guideline_middle"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
