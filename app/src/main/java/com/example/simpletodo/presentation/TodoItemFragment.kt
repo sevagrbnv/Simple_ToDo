@@ -155,6 +155,7 @@ class TodoItemFragment : Fragment() {
             return TodoItemFragment().apply {
                 arguments = Bundle().apply {
                     putString(SCREEN_MODE, ADD_MODE)
+                    Log.d("single", "newInstanceAddItem")
                 }
             }
         }
