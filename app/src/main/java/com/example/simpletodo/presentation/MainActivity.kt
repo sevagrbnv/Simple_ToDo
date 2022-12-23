@@ -2,7 +2,7 @@ package com.example.simpletodo.presentation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
 import com.example.simpletodo.R
 
@@ -30,12 +30,7 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun onEditingFinished() {
-        val fragment = MainFragment()
-        supportFragmentManager.popBackStack()
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.main_container, fragment)
-            .addToBackStack(null)
-            .commit()
+        replaceWithPopBackStack(R.id.main_container, MainFragment())
     }
 
     private fun isOnePaneMode(): Boolean {
@@ -45,17 +40,26 @@ class MainActivity : AppCompatActivity(),
     override fun openSecondFragment(mode: String, itemId: Int) {
 
         val fragment = when (mode) {
-            "ADD" -> TodoItemFragment.newInstanceAddItem()
-            "EDIT" -> TodoItemFragment.newInstanceEditItem(itemId)
+            ADD_MODE -> TodoItemFragment.newInstanceAddItem()
+            EDIT_MODE -> TodoItemFragment.newInstanceEditItem(itemId)
             else -> throw RuntimeException("Unknown type of mode $mode")
         }
-        Log.d("single", "openSecondFragment $mode")
+
         val currentContainer = if (isOnePaneMode()) R.id.main_container
             else R.id.todoitem_container
+        replaceWithPopBackStack(currentContainer, fragment)
+    }
+
+    private fun replaceWithPopBackStack(container: Int, fragment: Fragment) {
         supportFragmentManager.popBackStack()
         supportFragmentManager.beginTransaction()
-            .replace(currentContainer, fragment)
+            .replace(container, fragment)
             .addToBackStack(null)
             .commit()
+    }
+
+    companion object {
+        val ADD_MODE = "ADD_MODE"
+        val EDIT_MODE = "EDIT_MODE"
     }
 }

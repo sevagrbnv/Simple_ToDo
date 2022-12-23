@@ -45,7 +45,7 @@ class MainFragment : Fragment() {
         }
         val btnAddItem = view.findViewById<FloatingActionButton>(R.id.fab)
         btnAddItem.setOnClickListener {
-            openSecondFragmentListener.openSecondFragment("ADD", NEEDLES_KEY)
+            openSecondFragmentListener.openSecondFragment(ADD_MODE, NEEDLES_KEY)
         }
     }
 
@@ -97,7 +97,7 @@ class MainFragment : Fragment() {
 
     private fun setItemClickListener() {
         todoListAdapter.onTodoItemClickListener = {
-            openSecondFragmentListener.openSecondFragment("EDIT", it.id)
+            openSecondFragmentListener.openSecondFragment(EDIT_MODE, it.id)
         }
     }
 
@@ -115,5 +115,7 @@ class MainFragment : Fragment() {
     companion object {
 
         private val NEEDLES_KEY = -1
+        private val ADD_MODE = "ADD_MODE"
+        private val EDIT_MODE = "EDIT_MODE"
     }
 }
