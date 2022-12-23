@@ -2,51 +2,38 @@ package com.example.simpletodo.presentation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
-import androidx.fragment.app.Fragment
+import android.util.Log
 import androidx.fragment.app.FragmentContainerView
-import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.RecyclerView
 import com.example.simpletodo.R
-import com.example.simpletodo.presentation.recView.TodoListAdapter
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class MainActivity : AppCompatActivity(), TodoItemFragment.OnEditingFinishedListener {
+class MainActivity : AppCompatActivity(),
+    TodoItemFragment.OnEditingFinishedListener,
+    MainFragment.OpenSecondFragmentListener {
 
-    private lateinit var viewModel: MainViewModel
-    private lateinit var todoListAdapter: TodoListAdapter
     private var todoItemContainer: FragmentContainerView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         todoItemContainer = findViewById(R.id.todoitem_container)
-        setRecView()
-        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
-        viewModel.todoList.observe(this) {
-            todoListAdapter.submitList(it)
-        }
-        val btnAddItem = findViewById<FloatingActionButton>(R.id.fab)
-        btnAddItem.setOnClickListener {
-            if (isOnePaneMode()) {
-                val intent = ItemActivity.newIntentAdd(this)
-                startActivity(intent)
-            } else {
-                startSecondFragment(TodoItemFragment.newInstanceAddItem())
-            }
-        }
+        if (savedInstanceState == null)
+            setMainFragmentContainer()
+    }
+
+    private fun setMainFragmentContainer() {
+        val fragment = MainFragment()
+        if (isOnePaneMode())
+            supportFragmentManager.popBackStack()
+        supportFragmentManager.beginTransaction()
+            .add(R.id.main_container, fragment)
+            .commit()
     }
 
     override fun onEditingFinished() {
-        Toast.makeText(this@MainActivity, "Success", Toast.LENGTH_SHORT).show()
-        supportFragmentManager.popBackStack()
-    }
-
-    private fun startSecondFragment(fragment: Fragment) {
+        val fragment = MainFragment()
         supportFragmentManager.popBackStack()
         supportFragmentManager.beginTransaction()
-            .replace(R.id.todoitem_container, fragment)
+            .replace(R.id.main_container, fragment)
             .addToBackStack(null)
             .commit()
     }
@@ -55,68 +42,20 @@ class MainActivity : AppCompatActivity(), TodoItemFragment.OnEditingFinishedList
         return todoItemContainer == null
     }
 
-    private fun setRecView() {
-        val rcViewTodoList = findViewById<RecyclerView>(R.id.recView)
-        todoListAdapter = TodoListAdapter()
-        with(rcViewTodoList) {
-            adapter = todoListAdapter
-            recycledViewPool.setMaxRecycledViews(
-                TodoListAdapter.ITEM_IS_COMPLETE,
-                TodoListAdapter.MAX_POOL_SIZE)
-            recycledViewPool.setMaxRecycledViews(
-                TodoListAdapter.ITEM_IS_NOT_COMPLETE,
-                TodoListAdapter.MAX_POOL_SIZE)
-            recycledViewPool.setMaxRecycledViews(
-                TodoListAdapter.ITEM_IS_COMPLETE_HIGH,
-                TodoListAdapter.MAX_POOL_SIZE)
-            recycledViewPool.setMaxRecycledViews(
-                TodoListAdapter.ITEM_IS_NOT_COMPLETE_HIGH,
-                TodoListAdapter.MAX_POOL_SIZE)
+    override fun openSecondFragment(mode: String, itemId: Int) {
+
+        val fragment = when (mode) {
+            "ADD" -> TodoItemFragment.newInstanceAddItem()
+            "EDIT" -> TodoItemFragment.newInstanceEditItem(itemId)
+            else -> throw RuntimeException("Unknown type of mode $mode")
         }
-
-        setCheckboxListener()
-        setItemClickListener()
-        setSwipeListener(rcViewTodoList)
+        Log.d("single", "openSecondFragment $mode")
+        val currentContainer = if (isOnePaneMode()) R.id.main_container
+            else R.id.todoitem_container
+        supportFragmentManager.popBackStack()
+        supportFragmentManager.beginTransaction()
+            .replace(currentContainer, fragment)
+            .addToBackStack(null)
+            .commit()
     }
-
-    private fun setSwipeListener(rcViewTodoList: RecyclerView) {
-        val callback = object : ItemTouchHelper.SimpleCallback(
-            0,
-            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
-        ) {
-            override fun onMove(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                target: RecyclerView.ViewHolder
-            ): Boolean {
-                return false
-            }
-
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val item = todoListAdapter.currentList[viewHolder.adapterPosition]
-                viewModel.deleteTodoItem(item)
-            }
-        }
-        val itemTouchHelper = ItemTouchHelper(callback)
-        itemTouchHelper.attachToRecyclerView(rcViewTodoList)
-    }
-
-    private fun setItemClickListener() {
-        todoListAdapter.onTodoItemClickListener = {
-            if (isOnePaneMode()) {
-                val intent = ItemActivity.newIntentEdit(this, it.id)
-                startActivity(intent)
-            } else {
-                startSecondFragment(TodoItemFragment.newInstanceEditItem(it.id))
-            }
-        }
-    }
-
-    private fun setCheckboxListener() {
-        todoListAdapter.onCheckboxClickListener = {
-            viewModel.changeItemCompleteState(it)
-        }
-    }
-
-
 }
