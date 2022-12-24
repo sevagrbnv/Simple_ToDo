@@ -21,7 +21,7 @@ import com.google.android.material.textfield.TextInputLayout
 class TodoItemFragment : Fragment() {
 
     private lateinit var viewModel: ItemViewModel
-    private lateinit var onEditingFinishedListener: OnEditingFinishedListener
+    private var onEditingFinishedListener: OnEditingFinishedListener? = null
 
     private lateinit var tilDesc: TextInputLayout
     private lateinit var edTextDesc: TextInputEditText
@@ -38,6 +38,11 @@ class TodoItemFragment : Fragment() {
         } else {
             throw RuntimeException("Activity must implement OnEditingFinishedListener")
         }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        onEditingFinishedListener = null
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,7 +78,7 @@ class TodoItemFragment : Fragment() {
         }
 
         viewModel.shouldCloseScreen.observe(viewLifecycleOwner) {
-            onEditingFinishedListener.onEditingFinished()
+            onEditingFinishedListener?.onEditingFinished()
         }
     }
 

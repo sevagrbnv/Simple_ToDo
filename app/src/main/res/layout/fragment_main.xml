@@ -15,7 +15,16 @@
         tools:listitem="@layout/todoitem_enable"
         android:paddingBottom="64dp"
         android:clipToPadding="false"
-        android:scrollbarStyle="outsideOverlay"/>
+        android:scrollbarStyle="outsideOverlay"
+        android:visibility="visible"/>
+
+    <TextView
+        android:id="@+id/textIfEmptyList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/list_is_empty"
+        android:gravity="center"
+        android:visibility="invisible"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"

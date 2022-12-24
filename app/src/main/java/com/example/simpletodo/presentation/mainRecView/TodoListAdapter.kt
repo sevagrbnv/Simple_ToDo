@@ -14,15 +14,12 @@ class TodoListAdapter : ListAdapter<TodoItem, TodoItemViewHolder>(TodoItemDiffCa
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoItemViewHolder {
         val layout = when (viewType) {
             ITEM_IS_COMPLETE -> R.layout.todoitem_disable
-            ITEM_IS_COMPLETE_HIGH -> R.layout.todoitem_disable
+            ITEM_IS_COMPLETE_HIGH -> R.layout.todoitem_disable_high
             ITEM_IS_NOT_COMPLETE -> R.layout.todoitem_enable
-            ITEM_IS_NOT_COMPLETE_HIGH -> R.layout.todoitem_enable
+            ITEM_IS_NOT_COMPLETE_HIGH -> R.layout.todoitem_enable_high
             else -> throw java.lang.RuntimeException("Unknown type of view: $viewType")
         }
         val view = LayoutInflater.from(parent.context).inflate(layout, parent,false)
-        if (viewType == ITEM_IS_NOT_COMPLETE_HIGH || viewType == ITEM_IS_COMPLETE_HIGH)
-            view.setBackgroundResource(R.color.red_high)
-            //view.setBackground(ContextCompat.getColor(parent.context, R.color.red_high))
         return TodoItemViewHolder(view)
     }
 
