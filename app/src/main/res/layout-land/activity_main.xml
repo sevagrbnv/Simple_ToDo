@@ -25,6 +25,17 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         app:layout_constraintStart_toStartOf="@id/guideline_middle"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="invisible"/>
+
+    <TextView
+        android:id="@+id/textSecondFragmentIsEmpty"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        app:layout_constraintStart_toStartOf="@id/guideline_middle"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="@string/here_will_be_your_tasks"
+        android:gravity="center"
+        android:visibility="visible"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

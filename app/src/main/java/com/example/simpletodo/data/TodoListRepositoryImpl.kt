@@ -36,8 +36,12 @@ object TodoListRepositoryImpl: TodoListRepository {
     }
 
     override fun editTodoItem(todoItem: TodoItem) {
-        val oldItem = getTodoItem(todoItem.id)
-        todoList.remove(oldItem)
+        try {
+            val oldItem = getTodoItem(todoItem.id)
+            todoList.remove(oldItem)
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+        }
         addTodoItem(todoItem)
     }
 

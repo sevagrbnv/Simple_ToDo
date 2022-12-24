@@ -2,6 +2,8 @@ package com.example.simpletodo.presentation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
 import com.example.simpletodo.R
@@ -31,6 +33,24 @@ class MainActivity : AppCompatActivity(),
 
     override fun onEditingFinished() {
         replaceWithPopBackStack(R.id.main_container, MainFragment())
+        hideSecondFragment()
+    }
+
+    private fun showSecondFragment() {
+        setVisibleOfSecondFragment(true)
+    }
+
+    private fun hideSecondFragment() {
+        setVisibleOfSecondFragment(false)
+    }
+
+    private fun setVisibleOfSecondFragment(state: Boolean) {
+        if (!isOnePaneMode()) {
+            val container = findViewById<FragmentContainerView>(R.id.todoitem_container)
+            val textIfIsEmpty = findViewById<TextView>(R.id.textSecondFragmentIsEmpty)
+            container.isVisible = state
+            textIfIsEmpty.isVisible = !state
+        }
     }
 
     private fun isOnePaneMode(): Boolean {
@@ -48,6 +68,7 @@ class MainActivity : AppCompatActivity(),
         val currentContainer = if (isOnePaneMode()) R.id.main_container
             else R.id.todoitem_container
         replaceWithPopBackStack(currentContainer, fragment)
+        showSecondFragment()
     }
 
     private fun replaceWithPopBackStack(container: Int, fragment: Fragment) {

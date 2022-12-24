@@ -5,4 +5,6 @@
     <string name="error_empty_line">Error! Line is empty</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="list_is_empty">List is empty</string>
+    <string name="here_will_be_your_tasks">Here will be your tasks</string>
 </resources>

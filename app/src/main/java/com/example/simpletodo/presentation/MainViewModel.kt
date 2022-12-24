@@ -1,5 +1,7 @@
 package com.example.simpletodo.presentation
 
+import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.simpletodo.data.TodoListRepositoryImpl
@@ -18,6 +20,10 @@ class MainViewModel : ViewModel() {
 
     val todoList = getTodoListUseCase.execute()
 
+//    private val _isEmptyList = MutableLiveData<Boolean>()
+//    val isEmptyList: LiveData<Boolean>
+//        get() = _isEmptyList
+
     fun deleteTodoItem(todoItem: TodoItem) {
         deleteTodoListUseCase.execute(todoItem)
     }
@@ -26,5 +32,9 @@ class MainViewModel : ViewModel() {
     fun changeItemCompleteState(todoItem: TodoItem) {
         val newItem = todoItem.copy(isComplete = !todoItem.isComplete)
         editTodoItemUseCase.execute(newItem)
+    }
+
+    fun isEmptyList(): Boolean {
+        return todoList.value.isNullOrEmpty()
     }
 }
