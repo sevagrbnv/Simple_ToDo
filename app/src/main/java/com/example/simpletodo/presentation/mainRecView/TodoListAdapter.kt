@@ -4,12 +4,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import com.example.simpletodo.R
-import com.example.simpletodo.domain.TodoItem
 
-class TodoListAdapter : ListAdapter<TodoItem, TodoItemViewHolder>(TodoItemDiffCallback()) {
+class TodoListAdapter : ListAdapter<com.example.simpletodo.domain.TodoItem, TodoItemViewHolder>(TodoItemDiffCallback()) {
 
-    var onCheckboxClickListener: ((TodoItem) -> Unit)? = null
-    var onTodoItemClickListener: ((TodoItem) -> Unit)? = null
+    var onCheckboxClickListener: ((com.example.simpletodo.domain.TodoItem) -> Unit)? = null
+    var onTodoItemClickListener: ((com.example.simpletodo.domain.TodoItem) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoItemViewHolder {
         val layout = when (viewType) {

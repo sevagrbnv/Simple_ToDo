@@ -2,12 +2,11 @@ package com.example.simpletodo.presentation
 
 import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -18,7 +17,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 class MainFragment : Fragment() {
 
     private var openSecondFragmentListener: OpenSecondFragmentListener? = null
-    private var secondFragmentIsEmptyText: TextView? = null
 
     private lateinit var viewModel: MainViewModel
     private lateinit var todoListAdapter: TodoListAdapter
