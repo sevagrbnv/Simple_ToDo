@@ -20,10 +20,6 @@ class MainViewModel : ViewModel() {
 
     val todoList = getTodoListUseCase.execute()
 
-//    private val _isEmptyList = MutableLiveData<Boolean>()
-//    val isEmptyList: LiveData<Boolean>
-//        get() = _isEmptyList
-
     fun deleteTodoItem(todoItem: TodoItem) {
         deleteTodoListUseCase.execute(todoItem)
     }

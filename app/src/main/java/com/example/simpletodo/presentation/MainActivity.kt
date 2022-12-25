@@ -67,8 +67,8 @@ class MainActivity : AppCompatActivity(),
 
         val currentContainer = if (isOnePaneMode()) R.id.main_container
             else R.id.todoitem_container
-        replaceWithPopBackStack(currentContainer, fragment)
         showSecondFragment()
+        replaceWithPopBackStack(currentContainer, fragment)
     }
 
     private fun replaceWithPopBackStack(container: Int, fragment: Fragment) {

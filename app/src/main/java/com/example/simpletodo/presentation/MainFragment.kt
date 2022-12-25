@@ -18,7 +18,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 class MainFragment : Fragment() {
 
     private var openSecondFragmentListener: OpenSecondFragmentListener? = null
-    private var secondFragmentIsEmptyText: TextView? = null
 
     private lateinit var viewModel: MainViewModel
     private lateinit var todoListAdapter: TodoListAdapter
