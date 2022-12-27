@@ -81,13 +81,12 @@ class MainFragment : Fragment() {
         setCheckboxListener()
         setItemClickListener()
         setSwipeListener(rcViewTodoList)
-        checkListForEmpty(rcViewTodoList)
     }
 
     private fun checkListForEmpty(rcView: RecyclerView) {
         if (viewModel.isEmptyList()) {
-            rcView.visibility = View.INVISIBLE
-            textIfEmpty.visibility = View.VISIBLE
+            rcView.isVisible = false
+            textIfEmpty.isVisible = true
         }
     }
 
