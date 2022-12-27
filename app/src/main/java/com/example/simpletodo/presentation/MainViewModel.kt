@@ -1,25 +1,37 @@
 package com.example.simpletodo.presentation
-import androidx.lifecycle.ViewModel
 
-class MainViewModel : ViewModel() {
+import android.app.Application
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.AndroidViewModel
+import com.example.simpletodo.data.TodoListRepositoryImpl
+import com.example.simpletodo.domain.DeleteTodoItemUseCase
+import com.example.simpletodo.domain.EditTodoItemUseCase
+import com.example.simpletodo.domain.GetTodoListUseCase
+import com.example.simpletodo.domain.TodoItem
+import kotlinx.coroutines.launch
 
-    private val repository = com.example.simpletodo.data.TodoListRepositoryImpl
+class MainViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val getTodoListUseCase = com.example.simpletodo.domain.GetTodoListUseCase(repository)
-    private val deleteTodoListUseCase =
-        com.example.simpletodo.domain.DeleteTodoItemUseCase(repository)
-    private val editTodoItemUseCase = com.example.simpletodo.domain.EditTodoItemUseCase(repository)
+    private val repository = TodoListRepositoryImpl(application)
+
+    private val getTodoListUseCase = GetTodoListUseCase(repository)
+    private val deleteTodoListUseCase = DeleteTodoItemUseCase(repository)
+    private val editTodoItemUseCase = EditTodoItemUseCase(repository)
 
     val todoList = getTodoListUseCase.execute()
 
-    fun deleteTodoItem(todoItem: com.example.simpletodo.domain.TodoItem) {
-        deleteTodoListUseCase.execute(todoItem)
+    fun deleteTodoItem(todoItem: TodoItem) {
+        viewModelScope.launch {
+            deleteTodoListUseCase.execute(todoItem)
+        }
     }
 
     // for change state of checkbox on item
-    fun changeItemCompleteState(todoItem: com.example.simpletodo.domain.TodoItem) {
-        val newItem = todoItem.copy(isComplete = !todoItem.isComplete)
-        editTodoItemUseCase.execute(newItem)
+    fun changeItemCompleteState(todoItem: TodoItem) {
+        viewModelScope.launch {
+            val newItem = todoItem.copy(isComplete = !todoItem.isComplete)
+            editTodoItemUseCase.execute(newItem)
+        }
     }
 
     fun isEmptyList(): Boolean {
