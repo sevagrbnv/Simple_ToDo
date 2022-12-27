@@ -1,61 +1,39 @@
 package com.example.simpletodo.data
 
+import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import com.example.simpletodo.domain.TodoItem
 import com.example.simpletodo.domain.TodoListRepository
-import kotlin.random.Random
 
-object TodoListRepositoryImpl: TodoListRepository {
+class TodoListRepositoryImpl(
+    application: Application
+) : TodoListRepository {
 
-    private val todoListLD = MutableLiveData<List<TodoItem>>()
-    private val todoList = sortedSetOf<TodoItem>({o1, o2 -> o1.id.compareTo(o2.id)})
+    private val todoListDao = TodoDatabase.getInstance(application).todoListDao()
+    private val mapper = TodoListMapper()
 
-    private var autoIncrementId = 0
-
-    init {
-        for (i in 0..10) {
-            val item = TodoItem(desc = "Text #$i",
-                isHigh = Random.nextBoolean(),
-                isComplete = Random.nextBoolean())
-            addTodoItem(item)
-        }
+    override suspend fun addTodoItem(todoItem: TodoItem) {
+        todoListDao.addTodo(mapper.mapItemToEntity(todoItem))
     }
 
-    override fun addTodoItem(todoItem: TodoItem) {
-        if (todoItem.id == TodoItem.UNDEFINED_ID) {
-            todoItem.id = autoIncrementId++
-        }
-        todoList.add(todoItem)
-        updateList()
+    override suspend fun deleteTodoItem(todoItem: TodoItem) {
+        todoListDao.deleteTodo(todoItem.id)
     }
 
-    override fun deleteTodoItem(todoItem: TodoItem) {
-        todoList.remove(todoItem)
-        updateList()
+    override suspend fun editTodoItem(todoItem: TodoItem) {
+        todoListDao.addTodo(mapper.mapItemToEntity(todoItem))
     }
 
-    override fun editTodoItem(todoItem: TodoItem) {
-        try {
-            val oldItem = getTodoItem(todoItem.id)
-            todoList.remove(oldItem)
-        } catch (e: java.lang.Exception) {
-            e.printStackTrace()
-        }
-        addTodoItem(todoItem)
+    override suspend fun getTodoItem(todoItemId: Int): TodoItem {
+        val dbModel = todoListDao.getTodo(todoItemId)
+        return mapper.mapEntityToItem(dbModel)
     }
 
-    override fun getTodoItem(todoItemId: Int): TodoItem {
-        return todoList.find {
-            it.id == todoItemId
-        } ?: throw java.lang.RuntimeException("Item with id $todoItemId not found")
-    }
-
-    override fun getTodoItemList(): LiveData<List<TodoItem>> {
-        return todoListLD
-    }
-
-    private fun updateList() {
-        todoListLD.value = todoList.toList()
+    override fun getTodoItemList(): LiveData<List<TodoItem>> = Transformations.map(
+        todoListDao.getTodoList()
+    ) {
+        mapper.mapListEntityToListItem(it)
     }
 }
