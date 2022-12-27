@@ -2,6 +2,7 @@ package com.example.simpletodo.presentation
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -48,11 +49,14 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        Log.e("aaaa", "kjhkjhkjkj")
+
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         viewModel.todoList.observe(viewLifecycleOwner) {
             todoListAdapter.submitList(it)
         }
         setRecView(view)
+
         val btnAddItem = view.findViewById<FloatingActionButton>(R.id.fab)
         btnAddItem.setOnClickListener {
             openSecondFragmentListener?.openSecondFragment(ADD_MODE, NEEDLES_KEY)
@@ -81,13 +85,16 @@ class MainFragment : Fragment() {
         setCheckboxListener()
         setItemClickListener()
         setSwipeListener(rcViewTodoList)
-        checkListForEmpty(rcViewTodoList)
+        //checkListForEmpty(rcViewTodoList)
     }
 
     private fun checkListForEmpty(rcView: RecyclerView) {
         if (viewModel.isEmptyList()) {
-            rcView.visibility = View.INVISIBLE
-            textIfEmpty.visibility = View.VISIBLE
+            rcView.isVisible = false
+            textIfEmpty.isVisible = true
+        } else {
+            rcView.isVisible = true
+            textIfEmpty.isVisible = false
         }
     }
 

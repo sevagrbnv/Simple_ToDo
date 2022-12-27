@@ -1,17 +1,19 @@
 package com.example.simpletodo.presentation
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.*
 import com.example.simpletodo.data.TodoListRepositoryImpl
 import com.example.simpletodo.domain.AddTodoItemUseCase
 import com.example.simpletodo.domain.EditTodoItemUseCase
 import com.example.simpletodo.domain.GetTodoItemUseCase
 import com.example.simpletodo.domain.TodoItem
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class ItemViewModel : ViewModel() {
+class ItemViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val repository = TodoListRepositoryImpl
+    private val repository = TodoListRepositoryImpl(application)
 
     private val getTodoItemUseCase = GetTodoItemUseCase(repository)
     private val addTodoItemUseCase = AddTodoItemUseCase(repository)
@@ -30,28 +32,34 @@ class ItemViewModel : ViewModel() {
         get() = _shouldCloseScreen
 
     fun getTodoItem(todoItemId: Int) {
-        val item = getTodoItemUseCase.execute(todoItemId)
-        _todoItem.value = item
+        viewModelScope.launch {
+            val item = getTodoItemUseCase.execute(todoItemId)
+            _todoItem.value = item
+        }
     }
 
     fun addTodoItem(inputDesc: String?, isHigh: Boolean) {
         val desc = parseDesc(inputDesc)
-        val validInput = isValidInput(desc, isHigh)
+        val validInput = isValidInput(desc)
         if (validInput) {
-            val item = TodoItem(desc = desc, isHigh = isHigh, isComplete = false)
-            addTodoItemUseCase.execute(item)
-            finishWork()
+            viewModelScope.launch {
+                val item = TodoItem(desc = desc, isHigh = isHigh, isComplete = false)
+                addTodoItemUseCase.execute(item)
+                finishWork()
+            }
         }
     }
 
     fun editTodoItem(inputDesc: String?, isHigh: Boolean) {
         val desc = parseDesc(inputDesc)
-        val validInput = isValidInput(desc, isHigh)
+        val validInput = isValidInput(desc)
         if (validInput) {
             _todoItem.value?.let {
-                val item = it.copy(desc = desc, isHigh = isHigh)
-                editTodoItemUseCase.execute(item)
-                finishWork()
+                viewModelScope.launch {
+                    val item = it.copy(desc = desc, isHigh = isHigh)
+                    editTodoItemUseCase.execute(item)
+                    finishWork()
+                }
             }
 
         }
@@ -61,8 +69,7 @@ class ItemViewModel : ViewModel() {
         return inputDesc?.trim() ?: ""
     }
 
-    private fun isValidInput(inputDesc: String, isHigh: Boolean): Boolean {
-        // if the data model becomes more complex
+    private fun isValidInput(inputDesc: String): Boolean {
         var result = true
         if (inputDesc.isBlank())  {
             _errorInputDesc.value = true
