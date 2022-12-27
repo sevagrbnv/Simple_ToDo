@@ -20,10 +20,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     val todoList = getTodoListUseCase.execute()
 
-//    private val _isEmptyList = MutableLiveData<Boolean>()
-//    val isEmptyList: LiveData<Boolean>
-//        get() = _isEmptyList
-
     fun deleteTodoItem(todoItem: TodoItem) {
         viewModelScope.launch {
             deleteTodoListUseCase.execute(todoItem)
