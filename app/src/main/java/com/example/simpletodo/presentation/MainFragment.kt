@@ -8,7 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -49,14 +49,11 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Log.e("aaaa", "kjhkjhkjkj")
-
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         viewModel.todoList.observe(viewLifecycleOwner) {
             todoListAdapter.submitList(it)
         }
         setRecView(view)
-
         val btnAddItem = view.findViewById<FloatingActionButton>(R.id.fab)
         btnAddItem.setOnClickListener {
             openSecondFragmentListener?.openSecondFragment(ADD_MODE, NEEDLES_KEY)
@@ -85,16 +82,13 @@ class MainFragment : Fragment() {
         setCheckboxListener()
         setItemClickListener()
         setSwipeListener(rcViewTodoList)
-        //checkListForEmpty(rcViewTodoList)
+        checkListForEmpty(rcViewTodoList)
     }
 
     private fun checkListForEmpty(rcView: RecyclerView) {
         if (viewModel.isEmptyList()) {
-            rcView.isVisible = false
-            textIfEmpty.isVisible = true
-        } else {
-            rcView.isVisible = true
-            textIfEmpty.isVisible = false
+            rcView.visibility = View.INVISIBLE
+            textIfEmpty.visibility = View.VISIBLE
         }
     }
 

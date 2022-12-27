@@ -1,15 +1,14 @@
 package com.example.simpletodo.presentation.mainRecView
 
 import androidx.recyclerview.widget.DiffUtil
-import com.example.simpletodo.domain.TodoItem
 
-class TodoItemDiffCallback: DiffUtil.ItemCallback<TodoItem>() {
+class TodoItemDiffCallback: DiffUtil.ItemCallback<com.example.simpletodo.domain.TodoItem>() {
 
-    override fun areItemsTheSame(oldItem: TodoItem, newItem: TodoItem): Boolean {
+    override fun areItemsTheSame(oldItem: com.example.simpletodo.domain.TodoItem, newItem: com.example.simpletodo.domain.TodoItem): Boolean {
         return oldItem.id == newItem.id
     }
 
-    override fun areContentsTheSame(oldItem: TodoItem, newItem: TodoItem): Boolean {
+    override fun areContentsTheSame(oldItem: com.example.simpletodo.domain.TodoItem, newItem: com.example.simpletodo.domain.TodoItem): Boolean {
         return oldItem == newItem
     }
 }

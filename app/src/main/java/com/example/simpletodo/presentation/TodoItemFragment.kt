@@ -12,7 +12,6 @@ import android.widget.CheckBox
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.simpletodo.R
-import com.example.simpletodo.domain.TodoItem
 import com.example.simpletodo.presentation.MainActivity.Companion.ADD_MODE
 import com.example.simpletodo.presentation.MainActivity.Companion.EDIT_MODE
 import com.google.android.material.textfield.TextInputEditText
@@ -29,7 +28,7 @@ class TodoItemFragment : Fragment() {
     private lateinit var bntSave: Button
 
     private var screenMode = UNKNOWN_MODE
-    private var itemId = TodoItem.UNDEFINED_ID
+    private var itemId = com.example.simpletodo.domain.TodoItem.UNDEFINED_ID
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -131,7 +130,7 @@ class TodoItemFragment : Fragment() {
         if (screenMode == EDIT_MODE) {
             if (!args.containsKey(ITEM_ID))
                 throw RuntimeException("Item id not found")
-            itemId = args.getInt(ITEM_ID, TodoItem.UNDEFINED_ID)
+            itemId = args.getInt(ITEM_ID, com.example.simpletodo.domain.TodoItem.UNDEFINED_ID)
         }
 
     }
