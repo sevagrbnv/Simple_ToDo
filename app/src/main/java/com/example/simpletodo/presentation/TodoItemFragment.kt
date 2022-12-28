@@ -7,25 +7,19 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.CheckBox
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.simpletodo.R
+import com.example.simpletodo.databinding.FragmentTodoitemBinding
 import com.example.simpletodo.presentation.MainActivity.Companion.ADD_MODE
 import com.example.simpletodo.presentation.MainActivity.Companion.EDIT_MODE
-import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
 
 class TodoItemFragment : Fragment() {
 
     private lateinit var viewModel: ItemViewModel
     private var onEditingFinishedListener: OnEditingFinishedListener? = null
 
-    private lateinit var tilDesc: TextInputLayout
-    private lateinit var edTextDesc: TextInputEditText
-    private lateinit var cBoxPriority: CheckBox
-    private lateinit var bntSave: Button
+    private lateinit var binding: FragmentTodoitemBinding
 
     private var screenMode = UNKNOWN_MODE
     private var itemId = com.example.simpletodo.domain.TodoItem.UNDEFINED_ID
@@ -54,13 +48,13 @@ class TodoItemFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_todoitem, container, false)
+        binding = FragmentTodoitemBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this)[ItemViewModel::class.java]
-        initViews(view)
         setTextChangeListener()
         startRightMode()
         observeViewModel()
@@ -73,7 +67,7 @@ class TodoItemFragment : Fragment() {
             } else {
                 null
             }
-            tilDesc.error = message
+            binding.tilDesc.error = message
         }
 
         viewModel.shouldCloseScreen.observe(viewLifecycleOwner) {
@@ -89,7 +83,7 @@ class TodoItemFragment : Fragment() {
     }
 
     private fun setTextChangeListener() {
-        edTextDesc.addTextChangedListener(object: TextWatcher {
+        binding.edTextDesc.addTextChangedListener(object: TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -103,18 +97,22 @@ class TodoItemFragment : Fragment() {
     private fun startEditMode() {
         viewModel.getTodoItem(itemId)
         viewModel.todoItem.observe(viewLifecycleOwner) {
-            edTextDesc.setText(it.desc)
-            cBoxPriority.isChecked = it.isHigh
+            binding.edTextDesc.setText(it.desc)
+            binding.cBoxPriority.isChecked = it.isHigh
         }
 
-        bntSave.setOnClickListener {
-            viewModel.editTodoItem(edTextDesc.text?.toString(), cBoxPriority.isChecked)
+        binding.btnSave.setOnClickListener {
+            viewModel.editTodoItem(
+                binding.edTextDesc.text?.toString(),
+                binding.cBoxPriority.isChecked)
         }
     }
 
     private fun startAddMode() {
-        bntSave.setOnClickListener {
-            viewModel.addTodoItem(edTextDesc.text?.toString(), cBoxPriority.isChecked)
+        binding.btnSave.setOnClickListener {
+            viewModel.addTodoItem(
+                binding.edTextDesc.text?.toString(),
+                binding.cBoxPriority.isChecked)
         }
     }
 
@@ -133,13 +131,6 @@ class TodoItemFragment : Fragment() {
             itemId = args.getInt(ITEM_ID, com.example.simpletodo.domain.TodoItem.UNDEFINED_ID)
         }
 
-    }
-
-    private fun initViews(view: View) {
-        tilDesc = view.findViewById(R.id.til_desc)
-        edTextDesc = view.findViewById(R.id.edTextDesc)
-        cBoxPriority = view.findViewById(R.id.cBoxPriority)
-        bntSave = view.findViewById(R.id.btn_save)
     }
 
     interface OnEditingFinishedListener {
