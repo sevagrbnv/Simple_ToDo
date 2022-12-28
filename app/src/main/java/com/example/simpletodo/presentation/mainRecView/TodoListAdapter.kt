@@ -1,9 +1,14 @@
 package com.example.simpletodo.presentation.mainRecView
 
+import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.ListAdapter
 import com.example.simpletodo.R
+import com.example.simpletodo.databinding.TodoitemDisableBinding
+import com.example.simpletodo.databinding.TodoitemEnableBinding
 
 class TodoListAdapter : ListAdapter<com.example.simpletodo.domain.TodoItem, TodoItemViewHolder>(TodoItemDiffCallback()) {
 
@@ -13,43 +18,60 @@ class TodoListAdapter : ListAdapter<com.example.simpletodo.domain.TodoItem, Todo
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoItemViewHolder {
         val layout = when (viewType) {
             ITEM_IS_COMPLETE -> R.layout.todoitem_disable
-            ITEM_IS_COMPLETE_HIGH -> R.layout.todoitem_disable_high
             ITEM_IS_NOT_COMPLETE -> R.layout.todoitem_enable
-            ITEM_IS_NOT_COMPLETE_HIGH -> R.layout.todoitem_enable_high
             else -> throw java.lang.RuntimeException("Unknown type of view: $viewType")
         }
-        val view = LayoutInflater.from(parent.context).inflate(layout, parent,false)
-        return TodoItemViewHolder(view)
+        val binding = DataBindingUtil.inflate<ViewDataBinding>(
+            LayoutInflater.from(parent.context),
+            layout,
+            parent,
+            false
+        )
+        return TodoItemViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: TodoItemViewHolder, position: Int) {
         val todoItem = getItem(position)
-        holder.checkbox.setOnClickListener {
-            onCheckboxClickListener?.invoke(todoItem)
-        }
-        holder.itemView.setOnClickListener {
-            onTodoItemClickListener?.invoke(todoItem)
-        }
+        val binding = holder.binding
 
-        holder.desc.text = todoItem.desc
-        holder.checkbox.isChecked = todoItem.isComplete
+        when (binding) {
+            is TodoitemDisableBinding  -> {
+                //binding.tvDesc.text = todoItem.desc
+                //binding.cb.isChecked = todoItem.isComplete
+                binding.todoItem = todoItem
+                binding.cb.setOnClickListener { onCheckboxClickListener?.invoke(todoItem) }
+                binding.root.setOnClickListener {
+                    onTodoItemClickListener?.invoke(todoItem)
+                }
+                binding.tvDesc.paintFlags = binding.tvDesc.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                if (todoItem.isHigh)
+                    binding.color.setBackgroundResource(R.color.red_high)
+            }
+            is TodoitemEnableBinding -> {
+                //binding.tvDesc.text = todoItem.desc
+                //binding.cb.isChecked = todoItem.isComplete
+                binding.todoItem = todoItem
+                binding.cb.setOnClickListener { onCheckboxClickListener?.invoke(todoItem) }
+                binding.root.setOnClickListener {
+                    onTodoItemClickListener?.invoke(todoItem)
+                }
+                if (todoItem.isHigh)
+                    binding.color.setBackgroundResource(R.color.red_high)
+            }
+
+        }
     }
 
     override fun getItemViewType(position: Int): Int {
         val item = getItem(position)
-        return if (!item.isComplete && !item.isHigh) ITEM_IS_NOT_COMPLETE
-            else if (!item.isComplete && item.isHigh) ITEM_IS_NOT_COMPLETE_HIGH
-            else if (item.isComplete && !item.isHigh) ITEM_IS_COMPLETE
-            else ITEM_IS_COMPLETE_HIGH
+        return if (!item.isComplete) ITEM_IS_NOT_COMPLETE
+            else ITEM_IS_COMPLETE
     }
 
 
     companion object {
         const val ITEM_IS_COMPLETE = 0
         const val ITEM_IS_NOT_COMPLETE = 1
-        const val ITEM_IS_COMPLETE_HIGH = 2
-        const val ITEM_IS_NOT_COMPLETE_HIGH = 3
-
-        const val MAX_POOL_SIZE = 10
+        const val MAX_POOL_SIZE = 30
     }
 }

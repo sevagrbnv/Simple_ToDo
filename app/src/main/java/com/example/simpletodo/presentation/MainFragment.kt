@@ -6,23 +6,21 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.example.simpletodo.R
+import com.example.simpletodo.databinding.FragmentMainBinding
 import com.example.simpletodo.presentation.mainRecView.TodoListAdapter
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainFragment : Fragment() {
+
+    private lateinit var binding: FragmentMainBinding
 
     private var openSecondFragmentListener: OpenSecondFragmentListener? = null
 
     private lateinit var viewModel: MainViewModel
     private lateinit var todoListAdapter: TodoListAdapter
-
-    private lateinit var textIfEmpty: TextView
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -42,7 +40,8 @@ class MainFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_main, container, false)
+        binding = FragmentMainBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -53,17 +52,14 @@ class MainFragment : Fragment() {
             todoListAdapter.submitList(it)
         }
         setRecView(view)
-        val btnAddItem = view.findViewById<FloatingActionButton>(R.id.fab)
-        btnAddItem.setOnClickListener {
+        binding.fab.setOnClickListener {
             openSecondFragmentListener?.openSecondFragment(ADD_MODE, NEEDLES_KEY)
         }
     }
 
     private fun setRecView(view: View) {
-        val rcViewTodoList = view.findViewById<RecyclerView>(R.id.recView)
-        textIfEmpty = view.findViewById(R.id.textIfEmptyList)
         todoListAdapter = TodoListAdapter()
-        with(rcViewTodoList) {
+        with(binding.recView) {
             adapter = todoListAdapter
             recycledViewPool.setMaxRecycledViews(
                 TodoListAdapter.ITEM_IS_COMPLETE,
@@ -71,22 +67,16 @@ class MainFragment : Fragment() {
             recycledViewPool.setMaxRecycledViews(
                 TodoListAdapter.ITEM_IS_NOT_COMPLETE,
                 TodoListAdapter.MAX_POOL_SIZE)
-            recycledViewPool.setMaxRecycledViews(
-                TodoListAdapter.ITEM_IS_COMPLETE_HIGH,
-                TodoListAdapter.MAX_POOL_SIZE)
-            recycledViewPool.setMaxRecycledViews(
-                TodoListAdapter.ITEM_IS_NOT_COMPLETE_HIGH,
-                TodoListAdapter.MAX_POOL_SIZE)
         }
         setCheckboxListener()
         setItemClickListener()
-        setSwipeListener(rcViewTodoList)
+        setSwipeListener(binding.recView)
     }
 
     private fun checkListForEmpty(rcView: RecyclerView) {
         if (viewModel.isEmptyList()) {
-            rcView.isVisible = false
-            textIfEmpty.isVisible = true
+            binding.recView.isVisible = false
+            binding.textIfEmptyList.isVisible = true
         }
     }
 
