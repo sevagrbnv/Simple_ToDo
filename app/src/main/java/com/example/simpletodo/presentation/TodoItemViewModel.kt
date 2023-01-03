@@ -8,14 +8,13 @@ import com.example.simpletodo.domain.EditTodoItemUseCase
 import com.example.simpletodo.domain.GetTodoItemUseCase
 import com.example.simpletodo.domain.TodoItem
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ItemViewModel(application: Application) : AndroidViewModel(application) {
-
-    private val repository = TodoListRepositoryImpl(application)
-
-    private val getTodoItemUseCase = GetTodoItemUseCase(repository)
-    private val addTodoItemUseCase = AddTodoItemUseCase(repository)
-    private val editTodoItemUseCase = EditTodoItemUseCase(repository)
+class TodoItemViewModel @Inject constructor(
+    private val getTodoItemUseCase: GetTodoItemUseCase,
+    private val addTodoItemUseCase: AddTodoItemUseCase,
+    private val editTodoItemUseCase: EditTodoItemUseCase
+) : ViewModel() {
 
     private val _errorInputDesc = MutableLiveData<Boolean>()
     val errorInputDesc: LiveData<Boolean>

@@ -6,13 +6,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.example.simpletodo.domain.TodoItem
 import com.example.simpletodo.domain.TodoListRepository
+import javax.inject.Inject
 
-class TodoListRepositoryImpl(
-    application: Application
+class TodoListRepositoryImpl @Inject constructor(
+    private val todoListDao: TodoDao,
+    private val mapper: TodoListMapper
 ) : TodoListRepository {
 
-    private val todoListDao = TodoDatabase.getInstance(application).todoListDao()
-    private val mapper = TodoListMapper()
 
     override suspend fun addTodoItem(todoItem: TodoItem) {
         todoListDao.addTodo(mapper.mapItemToEntity(todoItem))

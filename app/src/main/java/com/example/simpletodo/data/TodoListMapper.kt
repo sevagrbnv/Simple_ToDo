@@ -1,8 +1,9 @@
 package com.example.simpletodo.data
 
 import com.example.simpletodo.domain.TodoItem
+import javax.inject.Inject
 
-class TodoListMapper {
+class TodoListMapper @Inject constructor() {
 
     fun mapItemToEntity(todoItem: TodoItem) = TodoEntity(
         id = todoItem.id,

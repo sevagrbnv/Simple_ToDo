@@ -7,14 +7,21 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
 import com.example.simpletodo.R
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(),
     TodoItemFragment.OnEditingFinishedListener,
     MainFragment.OpenSecondFragmentListener {
 
+    private val component by lazy {
+        (application as App).component
+    }
+
     private var todoItemContainer: FragmentContainerView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        component.inject(this)
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         todoItemContainer = findViewById(R.id.todoitem_container)

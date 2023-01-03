@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.simpletodo.databinding.FragmentMainBinding
 import com.example.simpletodo.presentation.mainRecView.TodoListAdapter
+import javax.inject.Inject
 
 class MainFragment : Fragment() {
 
@@ -22,7 +23,15 @@ class MainFragment : Fragment() {
     private lateinit var viewModel: MainViewModel
     private lateinit var todoListAdapter: TodoListAdapter
 
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
+    private val component by lazy {
+        (requireActivity().application as App).component
+    }
+
     override fun onAttach(context: Context) {
+        component.inject(this)
         super.onAttach(context)
         if (context is OpenSecondFragmentListener) {
             openSecondFragmentListener = context
@@ -47,7 +56,7 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
+        viewModel = ViewModelProvider(this, viewModelFactory)[MainViewModel::class.java]
         viewModel.todoList.observe(viewLifecycleOwner) {
             todoListAdapter.submitList(it)
         }

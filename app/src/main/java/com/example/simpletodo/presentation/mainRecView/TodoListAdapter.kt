@@ -36,8 +36,6 @@ class TodoListAdapter : ListAdapter<com.example.simpletodo.domain.TodoItem, Todo
 
         when (binding) {
             is TodoitemDisableBinding  -> {
-                //binding.tvDesc.text = todoItem.desc
-                //binding.cb.isChecked = todoItem.isComplete
                 binding.todoItem = todoItem
                 binding.cb.setOnClickListener { onCheckboxClickListener?.invoke(todoItem) }
                 binding.root.setOnClickListener {
@@ -46,10 +44,9 @@ class TodoListAdapter : ListAdapter<com.example.simpletodo.domain.TodoItem, Todo
                 binding.tvDesc.paintFlags = binding.tvDesc.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
                 if (todoItem.isHigh)
                     binding.color.setBackgroundResource(R.color.red_high)
+                else binding.color.setBackgroundResource(R.color.white)
             }
             is TodoitemEnableBinding -> {
-                //binding.tvDesc.text = todoItem.desc
-                //binding.cb.isChecked = todoItem.isComplete
                 binding.todoItem = todoItem
                 binding.cb.setOnClickListener { onCheckboxClickListener?.invoke(todoItem) }
                 binding.root.setOnClickListener {
@@ -57,6 +54,7 @@ class TodoListAdapter : ListAdapter<com.example.simpletodo.domain.TodoItem, Todo
                 }
                 if (todoItem.isHigh)
                     binding.color.setBackgroundResource(R.color.red_high)
+                else binding.color.setBackgroundResource(R.color.white)
             }
 
         }

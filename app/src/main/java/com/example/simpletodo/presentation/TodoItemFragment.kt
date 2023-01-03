@@ -13,10 +13,11 @@ import com.example.simpletodo.R
 import com.example.simpletodo.databinding.FragmentTodoitemBinding
 import com.example.simpletodo.presentation.MainActivity.Companion.ADD_MODE
 import com.example.simpletodo.presentation.MainActivity.Companion.EDIT_MODE
+import javax.inject.Inject
 
 class TodoItemFragment : Fragment() {
 
-    private lateinit var viewModel: ItemViewModel
+    private lateinit var viewModel: TodoItemViewModel
     private var onEditingFinishedListener: OnEditingFinishedListener? = null
 
     private lateinit var binding: FragmentTodoitemBinding
@@ -24,7 +25,16 @@ class TodoItemFragment : Fragment() {
     private var screenMode = UNKNOWN_MODE
     private var itemId = com.example.simpletodo.domain.TodoItem.UNDEFINED_ID
 
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
+    private val component by lazy {
+        (requireActivity().application as App).component
+    }
+
     override fun onAttach(context: Context) {
+        component.inject(this)
+
         super.onAttach(context)
         if (context is OnEditingFinishedListener) {
             onEditingFinishedListener = context
@@ -54,7 +64,7 @@ class TodoItemFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(this)[ItemViewModel::class.java]
+        viewModel = ViewModelProvider(this, viewModelFactory)[TodoItemViewModel::class.java]
         setTextChangeListener()
         startRightMode()
         observeViewModel()

@@ -3,20 +3,20 @@ package com.example.simpletodo.presentation
 import android.app.Application
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import com.example.simpletodo.data.TodoListRepositoryImpl
 import com.example.simpletodo.domain.DeleteTodoItemUseCase
 import com.example.simpletodo.domain.EditTodoItemUseCase
 import com.example.simpletodo.domain.GetTodoListUseCase
 import com.example.simpletodo.domain.TodoItem
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MainViewModel(application: Application) : AndroidViewModel(application) {
-
-    private val repository = TodoListRepositoryImpl(application)
-
-    private val getTodoListUseCase = GetTodoListUseCase(repository)
-    private val deleteTodoListUseCase = DeleteTodoItemUseCase(repository)
-    private val editTodoItemUseCase = EditTodoItemUseCase(repository)
+class MainViewModel @Inject constructor(
+    private val getTodoListUseCase: GetTodoListUseCase,
+    private val deleteTodoListUseCase: DeleteTodoItemUseCase,
+    private val editTodoItemUseCase: EditTodoItemUseCase
+    ) : ViewModel() {
 
     val todoList = getTodoListUseCase.execute()
 
