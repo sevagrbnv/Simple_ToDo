@@ -1,4 +1,4 @@
-package com.example.simpletodo.presentation.mainRecView
+package com.example.simpletodo.presentation.MainFragment.mainRecView
 
 import android.view.View
 import android.widget.CheckBox

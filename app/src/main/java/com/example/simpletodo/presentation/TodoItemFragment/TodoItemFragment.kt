@@ -1,4 +1,4 @@
-package com.example.simpletodo.presentation
+package com.example.simpletodo.presentation.TodoItemFragment
 
 import android.content.Context
 import android.os.Bundle
@@ -11,8 +11,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.simpletodo.R
 import com.example.simpletodo.databinding.FragmentTodoitemBinding
+import com.example.simpletodo.presentation.App
 import com.example.simpletodo.presentation.MainActivity.Companion.ADD_MODE
 import com.example.simpletodo.presentation.MainActivity.Companion.EDIT_MODE
+import com.example.simpletodo.presentation.ViewModelFactory
 import javax.inject.Inject
 
 class TodoItemFragment : Fragment() {

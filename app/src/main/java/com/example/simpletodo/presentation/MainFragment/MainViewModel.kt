@@ -1,10 +1,7 @@
-package com.example.simpletodo.presentation
+package com.example.simpletodo.presentation.MainFragment
 
-import android.app.Application
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
-import com.example.simpletodo.data.TodoListRepositoryImpl
 import com.example.simpletodo.domain.DeleteTodoItemUseCase
 import com.example.simpletodo.domain.EditTodoItemUseCase
 import com.example.simpletodo.domain.GetTodoListUseCase
@@ -35,6 +32,8 @@ class MainViewModel @Inject constructor(
     }
 
     fun isEmptyList(): Boolean {
-        return todoList.value.isNullOrEmpty()
+        return todoList.value.let {
+            it?.isEmpty() ?: true
+        }
     }
 }

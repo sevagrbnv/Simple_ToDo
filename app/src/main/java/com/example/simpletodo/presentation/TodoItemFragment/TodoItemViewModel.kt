@@ -1,8 +1,6 @@
-package com.example.simpletodo.presentation
+package com.example.simpletodo.presentation.TodoItemFragment
 
-import android.app.Application
 import androidx.lifecycle.*
-import com.example.simpletodo.data.TodoListRepositoryImpl
 import com.example.simpletodo.domain.AddTodoItemUseCase
 import com.example.simpletodo.domain.EditTodoItemUseCase
 import com.example.simpletodo.domain.GetTodoItemUseCase
