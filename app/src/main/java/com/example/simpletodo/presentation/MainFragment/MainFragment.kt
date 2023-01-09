@@ -61,6 +61,7 @@ class MainFragment : Fragment() {
         viewModel = ViewModelProvider(this, viewModelFactory)[MainViewModel::class.java]
         viewModel.todoList.observe(viewLifecycleOwner) {
             todoListAdapter.submitList(it)
+            checkListForEmpty(binding.recView)
         }
         setRecView(view)
         binding.fab.setOnClickListener {

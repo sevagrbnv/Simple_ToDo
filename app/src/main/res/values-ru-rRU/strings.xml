@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SimpleToDo</string>
+    <string name="input_text">Введите текст</string>
+    <string name="high_priority">Высокий приоритет</string>
+    <string name="error_empty_line">Ошибка! Пустое поле</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="list_is_empty">Список пуст</string>
+    <string name="here_will_be_your_tasks">Здесь будут отображаться ваши задачи</string>
+    <string name="save">Сохранить</string>
+</resources>
