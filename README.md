@@ -1,4 +1,4 @@
-# Simple_ToDo - простой список дел
+# Simple_ToDo - простой список задач
 
 Ссылка на скачивание APK-файла (Google drive): https://drive.google.com/file/d/1sn9S7xSemriofRh5nf1669D97eigLZsg/view?usp=sharing
 
