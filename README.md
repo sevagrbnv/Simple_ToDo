@@ -11,7 +11,7 @@
 4. Библиотека для работы с SQLite: Room
 5. Асинхронность: Coroutines
 6. Верстка: XML (заполенение полей DataBinding)
-7. Реализация списка: RecyclerView + DiffUtil
+7. Реализация списка: RecyclerView + DiffUtils
 8. Тесты: JUnit5 + Mockito
 
 ## Описание приложение
