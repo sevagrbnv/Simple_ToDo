@@ -6,6 +6,7 @@ import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
+import androidx.fragment.app.FragmentTransaction
 import com.example.simpletodo.R
 import com.example.simpletodo.presentation.MainFragment.MainFragment
 import com.example.simpletodo.presentation.TodoItemFragment.TodoItemFragment
@@ -84,6 +85,7 @@ class MainActivity : AppCompatActivity(),
         supportFragmentManager.beginTransaction()
             .replace(container, fragment)
             .addToBackStack(null)
+            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
             .commit()
     }
 
