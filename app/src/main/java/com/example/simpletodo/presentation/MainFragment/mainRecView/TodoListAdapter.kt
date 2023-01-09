@@ -1,4 +1,4 @@
-package com.example.simpletodo.presentation.mainRecView
+package com.example.simpletodo.presentation.MainFragment.mainRecView
 
 import android.graphics.Paint
 import android.view.LayoutInflater
@@ -10,7 +10,9 @@ import com.example.simpletodo.R
 import com.example.simpletodo.databinding.TodoitemDisableBinding
 import com.example.simpletodo.databinding.TodoitemEnableBinding
 
-class TodoListAdapter : ListAdapter<com.example.simpletodo.domain.TodoItem, TodoItemViewHolder>(TodoItemDiffCallback()) {
+class TodoListAdapter : ListAdapter<com.example.simpletodo.domain.TodoItem, TodoItemViewHolder>(
+    TodoItemDiffCallback()
+) {
 
     var onCheckboxClickListener: ((com.example.simpletodo.domain.TodoItem) -> Unit)? = null
     var onTodoItemClickListener: ((com.example.simpletodo.domain.TodoItem) -> Unit)? = null

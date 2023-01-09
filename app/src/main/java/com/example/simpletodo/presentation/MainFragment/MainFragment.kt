@@ -1,4 +1,4 @@
-package com.example.simpletodo.presentation
+package com.example.simpletodo.presentation.MainFragment
 
 import android.content.Context
 import android.os.Bundle
@@ -11,7 +11,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.simpletodo.databinding.FragmentMainBinding
-import com.example.simpletodo.presentation.mainRecView.TodoListAdapter
+import com.example.simpletodo.presentation.App
+import com.example.simpletodo.presentation.ViewModelFactory
+import com.example.simpletodo.presentation.MainFragment.mainRecView.TodoListAdapter
 import javax.inject.Inject
 
 class MainFragment : Fragment() {

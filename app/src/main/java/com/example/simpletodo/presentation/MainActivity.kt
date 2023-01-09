@@ -7,7 +7,8 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
 import com.example.simpletodo.R
-import javax.inject.Inject
+import com.example.simpletodo.presentation.MainFragment.MainFragment
+import com.example.simpletodo.presentation.TodoItemFragment.TodoItemFragment
 
 class MainActivity : AppCompatActivity(),
     TodoItemFragment.OnEditingFinishedListener,

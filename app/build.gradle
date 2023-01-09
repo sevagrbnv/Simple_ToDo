@@ -9,6 +9,12 @@ android {
     namespace 'com.example.simpletodo'
     compileSdk 33
 
+    testOptions {
+        unitTests.all {
+            useJUnitPlatform()
+        }
+    }
+
     defaultConfig {
         applicationId "com.example.simpletodo"
         minSdk 24
@@ -18,6 +24,7 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+
 
     buildTypes {
         release {
@@ -47,14 +54,23 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
 
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.1.0"
+
     def dagger2_version = "2.44.2"
     implementation "com.google.dagger:dagger:$dagger2_version"
     kapt "com.google.dagger:dagger-compiler:$dagger2_version"
     kapt "com.google.dagger:dagger-android-processor:$dagger2_version"
 
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.4'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
+    def junit_ver = "5.8.1"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:$junit_ver"
+    testImplementation("org.junit.platform:junit-platform-launcher:1.8.1")
+    testImplementation("org.junit.jupiter:junit-jupiter-engine:$junit_ver")
+    testImplementation("org.junit.vintage:junit-vintage-engine:5.8.1")
+
+    def mockito_ver = "4.0.0"
+    testImplementation "org.mockito:mockito-core:$mockito_ver"
+    androidTestImplementation "org.mockito:mockito-kotlin:$mockito_ver"
+    testImplementation 'org.mockito:mockito-inline:2.13.0'
 
     def room_version = "2.4.3"
     implementation "androidx.room:room-runtime:$room_version"

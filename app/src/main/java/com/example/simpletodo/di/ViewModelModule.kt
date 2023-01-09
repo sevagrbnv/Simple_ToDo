@@ -1,8 +1,8 @@
 package com.example.simpletodo.di
 
 import androidx.lifecycle.ViewModel
-import com.example.simpletodo.presentation.MainViewModel
-import com.example.simpletodo.presentation.TodoItemViewModel
+import com.example.simpletodo.presentation.MainFragment.MainViewModel
+import com.example.simpletodo.presentation.TodoItemFragment.TodoItemViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
